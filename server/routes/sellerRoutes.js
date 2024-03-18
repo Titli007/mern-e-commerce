@@ -7,4 +7,5 @@ sellerRoutes.post('/seller/create/:userId', createSeller)
 sellerRoutes.get('/seller/get/:sellerId', getseller)
 sellerRoutes.get('/seller/all', getAllSeller)
 
+
 module.exports = sellerRoutes

@@ -65,6 +65,7 @@ const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const sellerRoutes = require("./routes/sellerRoutes");
 const cartRoutes = require("./routes/cartRoutes");
+const wishlistRoutes = require("./routes/wishlistRoutes");
 
 const connectDB = require("./db/db");
 
@@ -78,6 +79,7 @@ app.use(userRoutes);
 app.use(productRoutes);
 app.use(sellerRoutes);
 app.use(cartRoutes);
+app.use(wishlistRoutes);
 
 connectDB();
 

@@ -6,6 +6,11 @@ const productSchema =  new Schema({
     desc: String,
     imageUrl: String ,
     category: String,
+    seller_id : {
+        type  : Schema.Types.ObjectId,
+        ref : "Seller" ,
+        required : true
+    },
     shop_name: {
         type: String,
         ref: "Seller",

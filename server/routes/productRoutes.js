@@ -1,5 +1,5 @@
 const express = require("express")
-const {createProduct, updateProductPrice, deleteProduct, getProduct, getSingleProduct} = require("../controllers/productController")
+const {createProduct, updateProductPrice, deleteProduct, getProduct, getSingleProduct, getProductsOfSeller} = require("../controllers/productController")
 
 const productRoutes = express.Router()
 
@@ -7,6 +7,7 @@ const productRoutes = express.Router()
 productRoutes.post('/product/create/:sellerId', createProduct)
 productRoutes.put('/product/update/:productId', updateProductPrice)
 productRoutes.delete('/product/delete/:productId', deleteProduct)
+productRoutes.get('/products/get/:sellerId', getProductsOfSeller)
 
 //for customer
 

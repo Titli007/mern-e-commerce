@@ -41,6 +41,7 @@ const createProduct = async (req, res) => {
         desc: desc,
         imageUrl: imageUrl,
         category: category,
+        seller_id : sellerId,
         shop_name: seller.shop_name,
         price: price,
       });
@@ -126,7 +127,7 @@ const getSingleProduct = async(req,res)=>{
     try{
         const productId = req.params.productId
 
-        const existingProduct = await Product.findById(productId)
+        const existingProduct = await Product.findById(productId).populate("seller_id")
 
         if (!existingProduct) {
             return res.status(404).json({ message: 'Product not found' });
@@ -139,5 +140,24 @@ const getSingleProduct = async(req,res)=>{
     }
 }
 
+const getProductsOfSeller =async(req,res)=>{
+    
+    try{
+        const sellerId = req.params.sellerId
+        const products = await Product.find({seller_id: sellerId}).populate('seller_id')
+
+        if (!products) {
+            return res.status(404).json({ message: 'no product found' });
+        }
+
+
+
+        res.status(200).json({ message: 'product fetched successfully', products});
+        }catch(error){
+            console.log(error)
+            res.status(500).json({ error: 'Some error occurred' });
+        }
+    }
+
 module.exports = {
-    createProduct, updateProductPrice, deleteProduct, getProduct, getSingleProduct}
+    createProduct, updateProductPrice, deleteProduct, getProduct, getSingleProduct, getProductsOfSeller}
