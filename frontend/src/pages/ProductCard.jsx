@@ -67,9 +67,9 @@ console.log("dsfsdf",dynamicCart)
     
     //for wishlist
     
-    async function handleWishlistClick(){
+    async function handleEmptyHeartClick(){
       
-      const userId= '65e0d0ddeeef2034dd8f2abc'
+      const userId= '65d366a5663b0f345086c712'
       const res = await axios.post(`http://localhost:4000/wishlist/post/${userId}`, { product_id: product._id });
       setStaticWishList(!staticWishlist)
   }
@@ -78,7 +78,7 @@ console.log("dsfsdf",dynamicCart)
   // console.log("wishlisted?", staticWishlist)
 
   useEffect(()=>{
-    const userId= '65e0d0ddeeef2034dd8f2abc'
+    const userId= '65d366a5663b0f345086c712'
     axios.get(`http://localhost:4000/wishlist/get/${userId}`)
     .then(res=>
       {const productIds = res.data.existingWishlist.products.map(data => data.product_id._id);
@@ -126,8 +126,9 @@ console.log("dsfsdf",dynamicCart)
                   <button className='p-5 border-2' onClick={handleWishlistClick}>
                     {
                       staticWishlist || dynamicWishlist ?
-                      <FaHeart size={25} color="red"/>
-                      :<FaRegHeart size={25} color="red" />
+                      <button><FaHeart size={25} color="red"/></button>
+                      :
+                      <button><FaRegHeart size={25} color="red" /></button>
                       
                     }
                   </button>

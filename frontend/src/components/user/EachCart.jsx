@@ -27,7 +27,7 @@ const EachCart = ({eachCartData, updateProduct, removeFromCart, removeCartAddWis
  }
 
  
-async function addToWishlistHandler(){
+async function moveToWishlistHandler(){
   await removeCartAddWishlist(eachCartData.product_id._id)
 }
  
@@ -56,7 +56,7 @@ async function addToWishlistHandler(){
             <button className='bg-white px-4 pb-2 rounded-full border-2 text-4xl' onClick={quantityUpgradeHandler}>+</button>
           </div>
           <p className='px-10 py-1 text-primary border-2 border-primary' onClick={removeButtonHandler}>Remove</p>
-          <p className='px-10 py-1 text-primary border-2 border-primary' onClick={addToWishlistHandler}>Move To Wishlist</p>
+          <p className='px-10 py-1 text-primary border-2 border-primary' onClick={moveToWishlistHandler}>Move To Wishlist</p>
         </div>
 
     </div>

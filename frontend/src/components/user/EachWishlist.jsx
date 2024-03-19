@@ -3,7 +3,7 @@ import { RxCross1 } from "react-icons/rx";
 import axios from 'axios';
 
 const EachWishlist = ({wishlistData, deleteWishlist}) => {
-  const userId= '65e0d0ddeeef2034dd8f2abc'
+  const userId= '65d366a5663b0f345086c712'
 
   const removeButtonHandler = async() => {
     await deleteWishlist(wishlistData.product_id._id)

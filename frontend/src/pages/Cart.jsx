@@ -21,6 +21,15 @@ const Cart = () => {
       setCartData(res.data.populatedCart.products)
      }
 
+     async function removeCartAddWishlist(product_id){
+      const userId = '65d366a5663b0f345086c712'
+      const res = await axios.put(`http://localhost:4000/cart/delete/${userId}`,{product_id : product_id})
+      setCartData(res.data.populatedCart.products)
+
+      const res2 = await axios.post(`http://localhost:4000/wishlist/post/${userId}`, {product_id : product_id})
+      console.log(res2.data)
+     }
+
 
     async function updateProduct(product_id, quantity) {
       const userId = '65d366a5663b0f345086c712'
@@ -61,7 +70,7 @@ const Cart = () => {
               cartData.map((data, index)=>{
                   return(
                       <div key={index} className='bg-bg p-4'>
-                          <EachCart eachCartData = {data} updateProduct={updateProduct} removeFromCart={removeFromCart}/>
+                          <EachCart eachCartData = {data} updateProduct={updateProduct} removeFromCart={removeFromCart} removeCartAddWishlist={removeCartAddWishlist}/>
                       </div>
                   )
               })

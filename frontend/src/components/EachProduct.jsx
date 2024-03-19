@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { AiFillEdit } from "react-icons/ai";
 import axios from 'axios';
-import wishlist from '../pages/Wishlist';
 
 const EachProduct = ({product,index,button , isWishListed}) => {
   const buttonProp = button || null
@@ -22,7 +21,7 @@ const EachProduct = ({product,index,button , isWishListed}) => {
   const product_id = product._id
 
   async function handleWishlistClick(e){
-    const userId= '65e0d0ddeeef2034dd8f2abc'
+    const userId= '65d366a5663b0f345086c712'
     e.stopPropagation()
     const res = await axios.post(`http://localhost:4000/wishlist/post/${userId}`, { product_id: product_id });
     console.log(res.status)

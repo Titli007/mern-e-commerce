@@ -5,7 +5,7 @@ import EachWishlist from '../components/user/EachWishlist'
 const wishlist = () => {
   const [allWishlistdata, setAllWishlistdata] = useState([])
 
-  const userId= '65e0d0ddeeef2034dd8f2abc'
+  const userId= '65d366a5663b0f345086c712'
 
   useEffect(()=>{
     axios.get(`http://localhost:4000/wishlist/get/${userId}`)

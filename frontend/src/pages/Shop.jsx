@@ -22,7 +22,7 @@ const Shop = () => {
     // console.log(allProducts)
 
     useEffect(()=>{
-        const userId= '65e0d0ddeeef2034dd8f2abc'
+        const userId= '65d366a5663b0f345086c712'
         axios.get(`http://localhost:4000/wishlist/get/${userId}`)
         .then(res=>
             {const productIds = res.data.existingWishlist.products.map(data => data.product_id._id);
