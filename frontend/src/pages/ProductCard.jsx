@@ -8,6 +8,8 @@ import { FaLink } from "react-icons/fa";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { GiReturnArrow } from "react-icons/gi";
 import {useNavigate} from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
+import { notify } from '../components/Toast';
 
 const ProductCard = () => {
 
@@ -15,10 +17,8 @@ const ProductCard = () => {
     const [product, setProduct] = useState(null)
     const [cartInfo, setCartInfo] = useState(0)
     const [dynamicCart, setDynamicCart] = useState(false)
-    const navigate = useNavigate()
     const [staticWishlist, setStaticWishList] = useState(false)
     const [dynamicWishlist, setDynamicWishlist] = useState(false)
-    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(()=>{
         axios.get(`http://localhost:4000/singleproduct/get/${params.id}`)
@@ -26,10 +26,16 @@ const ProductCard = () => {
         .catch(error=>console.log(error))
     },[])
 
+    // let product_id = ""
+    // useEffect(()=>{
+    //   let product_id = product._id
+    // },[product])
+
     
     // for cart
 
     async function handleCart(){
+      notify("Product Added To The Cart" , 'success')
       const userId = '65d366a5663b0f345086c712'
       try {
         const res = await axios.put(`http://localhost:4000/cart/put/${userId}`, { product_id: product._id });
@@ -64,30 +70,70 @@ console.log("dsfsdf",dynamicCart)
 
 
 
+
     
     //for wishlist
+
+
+    useEffect(()=>{
+      const userId= '65d366a5663b0f345086c712'
+      axios.get(`http://localhost:4000/wishlist/get/${userId}`)
+      .then(res=>
+        {const productIds = res.data.existingWishlist.products.map(data => data.product_id._id);
+        setDynamicWishlist(productIds.includes(product._id))}
+        )
+      .catch(error=>console.log(error))
+    },[product])
+
+
+    useEffect(()=> {
+      setStaticWishList(dynamicWishlist) //dynamic
+    },[dynamicWishlist])
+
     
     async function handleWishlistClick(){
-      
-      const userId= '65d366a5663b0f345086c712'
-      const res = await axios.post(`http://localhost:4000/wishlist/post/${userId}`, { product_id: product._id });
       setStaticWishList(!staticWishlist)
+    }
+  
+  
+  async function postWishlistClick(e){
+    notify("Product Added To The Wishlist", 'success')
+    const userId= '65d366a5663b0f345086c712'
+    e.stopPropagation()
+    const res = await axios.post(`http://localhost:4000/wishlist/post/${userId}`, { product_id: product._id });
+    console.log(res.data)
+    if(res.status===200) {
+      setStaticWishList(true); //static
+  }
   }
   
-
-  // console.log("wishlisted?", staticWishlist)
-
-  useEffect(()=>{
+  async function removeWishlistClick(e){
+    notify("Product Removed From Wishlist", 'error')
     const userId= '65d366a5663b0f345086c712'
-    axios.get(`http://localhost:4000/wishlist/get/${userId}`)
-    .then(res=>
-      {const productIds = res.data.existingWishlist.products.map(data => data.product_id._id);
-      setDynamicWishlist(productIds.includes(product._id))}
-      )
-    .catch(error=>console.log(error))
-  },[product])
+    e.stopPropagation()
+    const res = await axios.put(`http://localhost:4000/wishlist/delete/${userId}`, { product_id: product._id });
+    console.log(res.data)
+    if(res.status===200) {
+      setStaticWishList(false); //static
+  }
+  }
 
-  // console.log("fwefwf",dynamicWishlist)
+  function copyUrlToClipboard() {
+    // Create a temporary input element
+  const tempInput = document.createElement('input');
+  // Set its value to the current URL
+  tempInput.value = window.location.href;
+  // Append it to the DOM
+  document.body.appendChild(tempInput);
+  // Select the input element's content
+  tempInput.select();
+  // Copy the selected content to the clipboard
+  document.execCommand('copy');
+  // Remove the temporary input element from the DOM
+  document.body.removeChild(tempInput);
+  // Optional: Provide some feedback to the user
+  alert('URL copied to clipboard!');
+  }
 
 
 
@@ -113,34 +159,38 @@ console.log("dsfsdf",dynamicCart)
         <div className='mt-10'>
           {
             product&&
-            <div className='flex justify-evenly mb-20'>
-              <div className='w-2/4'>
+            <div className='flex justify-evenly mb-20 w-full'>
+              <div className='w-2/4 mr-20'>
                 <img src={product.imageUrl} alt='product image'/>
               </div>
-              <div className='space-y-9'>
+              <div className='space-y-9 w-96'>
                 <p className='text-5xl  font-semibold tracking-wider'>{product.name}</p>
                 <p className='text-4xl text-gray-500'>₹{product.price}</p>
                 <p className='tracking-wide text-lg'>{product.desc}</p>
                 <p className='tracking-wide text-right text-2xl'>~ By {product.shop_name}</p>
                 <div className='flex justify-between pt-4'>
-                  <button className='p-5 border-2' onClick={handleWishlistClick}>
-                    {
-                      staticWishlist || dynamicWishlist ?
-                      <FaHeart size={25} color="red"/>
-                      :<FaRegHeart size={25} color="red" />
-                      
-                    }
-                  </button>
-                  <button className='p-5 border-2'><FaLink/></button>
-
-                                                                                                                                             
                   
+                <div className='p-5 border-2' onClick={handleWishlistClick}>
                   {
-                    cartInfo === 200 || dynamicCart ?
-                    <button className='bg-orange-200 text-xl px-6 py-3 rounded-md'>Added to cart</button>
-                    :
-                    <button className='bg-orange-200 text-xl px-8 py-3 rounded-md' onClick={handleCart}>Add To Cart</button>
+                    staticWishlist ?(
+                    <button onClick={removeWishlistClick}><FaHeart size={25} color="red"/></button>
+                    ):(
+                    <button onClick={postWishlistClick}><FaRegHeart size={25} color="red" /></button>
+                    )
                   }
+                </div>
+                  
+                <button className='p-5 border-2' onClick={copyUrlToClipboard}><FaLink/></button>
+
+
+                {
+                  cartInfo === 200 || dynamicCart ?
+                  <button className='bg-orange-200 text-xl px-6 py-3 rounded-md'>Added to cart</button>
+                  :
+                  <button className='bg-orange-200 text-xl px-8 py-3 rounded-md' onClick={handleCart}>Add To Cart</button>
+                }
+                <Toaster/>
+
 
                 </div>
                 <div className='border-2 px-4 flex justify-between'>

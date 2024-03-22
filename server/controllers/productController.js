@@ -124,6 +124,7 @@ const getProduct = async (req, res) => {
 };
 
 const getSingleProduct = async(req,res)=>{
+    
     try{
         const productId = req.params.productId
 

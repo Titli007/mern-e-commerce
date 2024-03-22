@@ -5,6 +5,8 @@ import ShopMaster from '../components/ShopMaster'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
 import { FaRegHeart } from "react-icons/fa";
+import { useLocation } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast'
 
 
 const Shop = () => {
@@ -12,8 +14,14 @@ const Shop = () => {
     const [allProducts, setAllProducts] = useState([])
     const [allWishlist, setAllWishlist] = useState([])
 
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const category = queryParams.get('category');
+
+    console.log(category)
+
     useEffect(()=>{
-        const getProductUrl = `http://localhost:4000/product/get`
+        const getProductUrl = category? `http://localhost:4000/product/get?category=${category}`  :`http://localhost:4000/product/get`
         axios.get(getProductUrl)
         .then(res=>{setAllProducts(res.data.products)})
         .catch(error=>console.log(error))
@@ -36,7 +44,7 @@ const Shop = () => {
   return (
     <div className='w-full flex flex-col items-center'>
         
-    <div className='max-w-[1400px] w-full '>
+    <div className='max-w-[1400px] w-full'>
         
         <div><ShopMaster/></div>
             <div>
@@ -51,6 +59,7 @@ const Shop = () => {
         </div>
         <div><Footer/></div>
     </div>
+    <Toaster/>
     </div>
   )
 }

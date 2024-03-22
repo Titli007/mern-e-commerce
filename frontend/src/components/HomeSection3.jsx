@@ -15,7 +15,7 @@ const HomeSection3 = () => {
     .then(res=>setAllProducts(res.data.products))
     .catch(error=>console.log(error))
   },[])
-
+  // 6287978317
   return (
     <>
     <p className='text-center font-bold text-4xl m-10'>Our Products</p>
@@ -28,7 +28,7 @@ const HomeSection3 = () => {
         })}
       </div>}
       <div className='w-full flex justify-center'>
-      <button className='px-10 py-1 text-primary border-2 border-primary' onClick={()=> navigate('/shop')}>Show More</button>
+      <button className='px-10 py-1 my-10 text-primary border-2 border-primary' onClick={()=> navigate('/shop')}>Show More</button>
       </div>
     
     </>

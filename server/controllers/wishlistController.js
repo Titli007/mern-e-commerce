@@ -41,7 +41,7 @@ const createWishlist = async (req, res) => {
         
                 const productInExistingWishlist = await Wishlist.findOne({ "products.product_id": product_id });
                 console.log("exisitng product", productInExistingWishlist)
-                if (productInExistingWishlist) {
+                if (productInExistingWishlist) { 
                     console.log("duplicate products trying to enter")
                     return res.status(500).json({ message: 'Product is already in the wishlist' });
                     

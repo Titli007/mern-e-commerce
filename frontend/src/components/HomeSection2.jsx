@@ -3,8 +3,10 @@ import CategorySection from './CategorySection'
 import dining from '../images/Mask Group (1).jpg'
 import living from '../images/Image-living room.jpg'
 import bedRoom from '../images/Mask Group (2).jpg'
+import { useNavigate } from 'react-router-dom'
 
 const HomeSection2 = () => {
+  const navigate = useNavigate()
   return (
     <div className='w-full flex flex-col items-center'>
         <div className='text-center '>
@@ -12,7 +14,7 @@ const HomeSection2 = () => {
             <p className='mb-9 text-slate-600 tracking-wider'>Explore furnitures for your specific room</p>
         </div>
         <div className='w-2/3 flex justify-between'>
-            <CategorySection image={dining} text="Dining"/>
+            <CategorySection image={dining} text="Dining" />
             <CategorySection image={living} text="Living"/>
             <CategorySection image={bedRoom} text="Bedroom"/>
         </div>

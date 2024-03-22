@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { notify } from '../Toast'
 
 
 const EachCart = ({eachCartData, updateProduct, removeFromCart, removeCartAddWishlist}) => {
@@ -23,11 +24,13 @@ const EachCart = ({eachCartData, updateProduct, removeFromCart, removeCartAddWis
  }
 
  async function removeButtonHandler(){
+  notify("Product Removed From Cart")
   await removeFromCart(eachCartData.product_id._id)
  }
 
  
 async function moveToWishlistHandler(){
+  notify("Product Added To Wishlist")
   await removeCartAddWishlist(eachCartData.product_id._id)
 }
  
@@ -40,7 +43,6 @@ async function moveToWishlistHandler(){
           </div>
           <div>
             <p>{eachCartData.product_id.name}</p>
-            <p>{eachCartData.product_id.desc}</p>
             
             
             <p>Seller :  {eachCartData.product_id.shop_name}</p>
@@ -58,7 +60,7 @@ async function moveToWishlistHandler(){
           <p className='px-10 py-1 text-primary border-2 border-primary' onClick={removeButtonHandler}>Remove</p>
           <p className='px-10 py-1 text-primary border-2 border-primary' onClick={moveToWishlistHandler}>Move To Wishlist</p>
         </div>
-
+      
     </div>
   )
 }

@@ -5,29 +5,49 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { AiFillEdit } from "react-icons/ai";
 import axios from 'axios';
+import { notify} from './Toast';
+import { Toaster } from 'react-hot-toast';
 
 const EachProduct = ({product,index,button , isWishListed}) => {
   const buttonProp = button || null
-  const [wishList, setWishList] = useState(false)
+  const [wishList, setWishList] = useState(false) //static
   const navigate = useNavigate()
   
  
   const param = useParams()
 
   useEffect(()=> {
-    setWishList(isWishListed)
+    setWishList(isWishListed) //dynamic
   },[isWishListed])
 
   const product_id = product._id
 
   async function handleWishlistClick(e){
-    const userId= '65d366a5663b0f345086c712'
     e.stopPropagation()
-    const res = await axios.post(`http://localhost:4000/wishlist/post/${userId}`, { product_id: product_id });
-    console.log(res.status)
-    if(res.status===200) {
-      setWishList(true);
+    setWishList(!wishList)
   }
+
+
+async function postWishlistClick(e){
+  notify("Product Added To WishList", 'success')
+  const userId= '65d366a5663b0f345086c712'
+  e.stopPropagation()
+  const res = await axios.post(`http://localhost:4000/wishlist/post/${userId}`, { product_id: product_id });
+  console.log(res.data)
+  if(res.status===200) {
+    setWishList(true); //static
+}
+}
+
+async function removeWishlistClick(e){
+  notify("Product Removed From Wishlist" , 'error')
+  const userId= '65d366a5663b0f345086c712'
+  e.stopPropagation()
+  const res = await axios.put(`http://localhost:4000/wishlist/delete/${userId}`, { product_id: product_id });
+  console.log(res.data)
+  if(res.status===200) {
+    setWishList(false); //static
+}
 }
 
   // console.log(wishList)
@@ -68,7 +88,7 @@ const EachProduct = ({product,index,button , isWishListed}) => {
   // }
 
   return (
-    <div className='text-center w-80 h-max'>
+    <div className='text-center w-80 h-max hover:scale-105 hover:transform hover:transition-transform hover:duration-300 hover:ease-in-out'>
         {
             product&&
             <div className='tracking-wide space-y-6 shadow-xl p-9' onClick={()=>navigate(`/product/${product_id}`)}>
@@ -79,20 +99,22 @@ const EachProduct = ({product,index,button , isWishListed}) => {
 
                 <div className='absolute top-0 right-0'>
                 
-                  <button className='p-2 rounded-full bg-white m-3' onClick={handleWishlistClick}>
+                  <div className='p-2 rounded-full bg-white m-3' onClick={handleWishlistClick}>
                     {
-                      isWishListed || wishList?
-                      <FaHeart size={25} color="red"/>:
-                      <FaRegHeart size={25} color="red" />
-                      
+                      wishList ?(
+                      <button onClick={removeWishlistClick}><FaHeart size={25} color="red"/></button>
+                      ):(
+                      <button onClick={postWishlistClick}><FaRegHeart size={25} color="red" /></button>
+                      )
                     }
-                  </button>
+                  </div>
                 </div>
               }
                 
                 
                 <p className='text-2xl font-semibold text-primary'>{product.name}</p>
                 <p className='truncate'>{product.desc}</p>
+                <p className='text-xl truncate'>{product.category}</p>
                 <p className='text-xl text-gray-500'>₹{product.price}</p>
             </div>
             <div className=''>
@@ -104,6 +126,7 @@ const EachProduct = ({product,index,button , isWishListed}) => {
             </div>
             </div>
         }
+        
     </div>
   )
 }

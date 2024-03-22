@@ -1,16 +1,19 @@
 import React from 'react'
 import { RxCross1 } from "react-icons/rx";
 import axios from 'axios';
+import { notify } from '../Toast';
+import { Toaster } from 'react-hot-toast';
 
 const EachWishlist = ({wishlistData, deleteWishlist}) => {
   const userId= '65d366a5663b0f345086c712'
 
   const removeButtonHandler = async() => {
+    notify("Product Removed From Wishlist" , 'error')
     await deleteWishlist(wishlistData.product_id._id)
   }
 
   async function handleCart(){
-
+    notify("Product Added To Cart" , 'success')
     const userId = '65d366a5663b0f345086c712'
 
     try {
@@ -37,6 +40,7 @@ const EachWishlist = ({wishlistData, deleteWishlist}) => {
         <button className='rounded-full p-3 text-xl bg-gray-200 absolute' onClick={removeButtonHandler}><RxCross1 /></button>
         </div>
       </div>
+      
     </div>
   )
 }

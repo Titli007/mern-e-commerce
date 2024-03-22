@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import EachWishlist from '../components/user/EachWishlist'
+import { Toaster } from 'react-hot-toast'
 
 const wishlist = () => {
   const [allWishlistdata, setAllWishlistdata] = useState([])
@@ -34,7 +35,7 @@ const wishlist = () => {
     <div className='w-full flex flex-col items-center'>
       <div className='max-w-[1400px] w-full'>
         {
-          allWishlistdata.length>0 &&
+          allWishlistdata.length>0 ?(
           <div className='grid grid-cols-3 m-10'>
             {
               allWishlistdata.map((data,index)=>{
@@ -46,8 +47,13 @@ const wishlist = () => {
               })
             }
           </div>
+          ):
+          (
+            <p className='text-center text-3xl tracking-wider text-primary m-20'>Yet To Add Product In Wishlist!</p>
+          )
         }
       </div>
+      <Toaster/>
     </div>
   )
 }
