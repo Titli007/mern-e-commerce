@@ -5,16 +5,21 @@ const Product = require("../models/Product")
 const createCart = async (req, res) => {
     try {
         const userId = req.params.userId;
+
+        console.log("user_id : ", userId)
         const existingCart = await Cart.findOne({ userId });
                 
         
 
         if (!existingCart) {
+            console.log("addfwefwewedwewewefweffwefwefwefwefw")
             const product_id = req.body.product_id;
             const quantity= req.body.quantity
+
+            console.log("dfsdfsdfs", product_id, quantity)
             const product = await Product.findById(product_id);
             if (!product) {
-                return res.status(404).json({ message: 'Product not found for the given product_Id' });
+                return res.status(401).json({ message: 'Product not found for the given product_Id' });
             } else {
                 const productObj = {
                     product_id: product_id,
@@ -104,7 +109,7 @@ const getCart = async(req,res) =>{
         const existingCart = await Cart.findOne({userId : userId}).populate("products.product_id")
 
         if (!existingCart) {
-            return res.status(404).json({ message: 'cart not found' });
+            return res.status(401).json({ message: 'cart not found' });
         }
 
 
@@ -124,7 +129,7 @@ const deleteCart = async (req, res) => {
         const existingCart = await Cart.findOne({ userId });
 
         if (!existingCart) {
-            return res.status(404).json({ error: "Cart not found" });
+            return res.status(401).json({ error: "Cart not found" });
         }
 
         let productFound = false;
@@ -148,7 +153,7 @@ const deleteCart = async (req, res) => {
         }
 
         if (!productFound) {
-            return res.status(404).json({ error: "Product not found in the cart" });
+            return res.status(401).json({ error: "Product not found in the cart" });
         }
     } catch (error) {
         console.log(error);

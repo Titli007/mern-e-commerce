@@ -1,15 +1,26 @@
-import React,{useEffect,useState} from 'react'
+import React,{useEffect,useState, useContext} from 'react'
 import axios from 'axios'
 import EachProductsOfSeller from './EachProductsOfSeller'
+import { globalContext } from '../../Global_variable/context'
 
 const GetProduct = () => {
-    const sellerId = '65e0d50e460a53c15595febb'
     const [products,setProducts] = useState([])
+    const {state} = useContext(globalContext)
+    const[ sellerId, setSellerId] = useState('')
+
+    useEffect(()=> {
+      setSellerId(state.sellerId)
+    }, [state.sellerId])
+
+    console.log("rsrert",sellerId)
+
     useEffect(()=>{
-      axios.get(`http://localhost:4000/products/get/${sellerId}`)
+      if(sellerId){
+      axios.get(`${import.meta.env.VITE_API_URL}/products/get/${sellerId}`)
       .then(response=>setProducts(response.data.products))
       .catch(error=>console.log(error))
-    },[])
+      }
+    },[sellerId])
 
     console.log(products)
   return (

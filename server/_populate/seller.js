@@ -10,7 +10,7 @@ function generateRandomShopName(index) {
 let allUser = []
 async function fetchUserData() {
   try {
-    const response = await axios.get(`http://localhost:4000/user/all`);
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/user/all`);
     allUser = response.data
   } catch (error) {
     console.error('Error fetching user data:', error.message);
@@ -21,7 +21,7 @@ async function fetchUserData() {
 // Function to create a seller with Axios
 async function createSellerWithAxios(userId, shopName) {
   try {
-    const response = await axios.post(`http://localhost:4000/seller/create/${userId}`, { shop_name: shopName });
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}/seller/create/${userId}`, { shop_name: shopName });
     console.log('Seller created successfully:', response.data);
   } catch (error) {
     console.error('Error creating seller:', error.message);

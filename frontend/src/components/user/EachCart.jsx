@@ -36,9 +36,9 @@ async function moveToWishlistHandler(){
  
 
   return (
-    <div className='border-b-2 border-gray-300 p-10 '>
+    <div className='border-b-2 border-gray-300 md:p-10 py-10'>
         <div className='text-3xl tracking-wider space-y-4 flex space-x-4'>
-          <div className='w-96'>
+          <div className='md:w-96 w-full'>
             <img  src={eachCartData.product_id.imageUrl}/>
           </div>
           <div>
@@ -51,14 +51,14 @@ async function moveToWishlistHandler(){
           
         </div>
 
-        <div className='flex space-x-5 text-2xl my-8 justify-between'>
-          <div className='flex'>
-            <button className='bg-white px-4 pb-2 rounded-full border-2 text-4xl' onClick={quantityDowngradeHandler}>-</button>
-            <p className=' bg-white border-2 px-5 pt-2 mx-3'>{quantity}</p>
-            <button className='bg-white px-4 pb-2 rounded-full border-2 text-4xl' onClick={quantityUpgradeHandler}>+</button>
+        <div className='flex space-x-5 text-2xl my-8 md:mx-5 mx-2'>
+          <div className='flex h-1/2'>
+            <button className='bg-white lg:px-4 lg:pb-2 rounded-full  border-2 text-4xl px-2' onClick={quantityDowngradeHandler}>-</button>
+            <p className=' bg-white border-2 lg:px-5 lg:pt-2 md:mx-3 px-2'>{quantity}</p>
+            <button className='bg-white lg:px-4 lg:pb-2 rounded-full border-2 text-4xl px-2' onClick={quantityUpgradeHandler}>+</button>
           </div>
-          <p className='px-10 py-1 text-primary border-2 border-primary' onClick={removeButtonHandler}>Remove</p>
-          <p className='px-10 py-1 text-primary border-2 border-primary' onClick={moveToWishlistHandler}>Move To Wishlist</p>
+          <p className='md:px-10 md:py-1 p-3 text-primary border-2 border-primary' onClick={removeButtonHandler}>Remove</p>
+          <p className='md:px-10 md:py-1 px-3 text-primary border-2 border-primary' onClick={moveToWishlistHandler}>Move To Wishlist</p>
         </div>
       
     </div>

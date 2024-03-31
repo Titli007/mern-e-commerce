@@ -19,7 +19,7 @@ function generateRandomUserData(index) {
 // Function to make Axios call to create a user
 async function createUserWithAxios(userData) {
   try {
-    const response = await axios.post('http://localhost:4000/user/signin', userData);
+    const response = await axios.post('${import.meta.env.VITE_API_URL}/user/signin', userData);
     console.log('User created successfully:', response.data);
   } catch (error) {
     console.error('Error creating user:', error.message);

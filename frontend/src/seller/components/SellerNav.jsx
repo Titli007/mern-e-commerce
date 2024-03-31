@@ -1,18 +1,28 @@
 import React from 'react'
-import { IoSearch } from "react-icons/io5";
-import { IoNotifications } from "react-icons/io5";
-import { RiAccountCircleFill } from "react-icons/ri";
+import { LuLogOut } from "react-icons/lu";
+import Cookies from 'js-cookie';
+import { GiHamburgerMenu } from "react-icons/gi";
 
-const SellerNav = () => {
+const SellerNav = ({toggleSideBar}) => {
+
+
+  function handleLogout(){
+    Cookies.remove('auth');
+    console.log("log out as seller");
+    location.reload();
+    navigate('/seller/login');
+  }
+
+
   return (
-    <div className='flex justify-between w-full text-5xl shadow-xl p-10  text-indigo-950 items-center rounded-md'>
-        <div className='flex space-x-0 items-center'>
-            <IoSearch/>
-            <input className='outline-none py-2 text-2xl px-12 ' placeholder='Search'/>
+    <div className='flex justify-between w-full text-5xl shadow-xl p-10  text-indigo-950 items-center rounded-md '>
+        <div className='flex items-center space-x-5'>
+          <span onClick={()=> toggleSideBar()}><GiHamburgerMenu/></span>
+          <span>Admin Panel</span>
         </div>
-        <div className='flex space-x-14'>
-            <IoNotifications/>
-            <RiAccountCircleFill/>
+        <div className='flex items-center space-x-2 font-semibold text-4xl cursor-pointer' onClick={handleLogout}>
+        <LuLogOut />
+        <span>Log out</span>
         </div>
     </div>
   )

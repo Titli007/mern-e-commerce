@@ -31,7 +31,7 @@ async function uploadImages() {
   const folderPath = path.join(__dirname, 'furnitureImages');
   const files = await fs.readdir(folderPath);
 
-  const response = await axios.get('http://localhost:4000/seller/all');
+  const response = await axios.get('${import.meta.env.VITE_API_URL}/seller/all');
   const allSeller = response.data;
 
   for (const file of files) {
@@ -56,7 +56,7 @@ async function uploadImages() {
       };
 
       try {
-        const response = await axios.post(`http://localhost:4000/product/create/${randomSeller._id}`, formData, { headers });
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/product/create/${randomSeller._id}`, formData, { headers });
 
         console.log('Product created successfully:', response.data);
       } catch (error) {

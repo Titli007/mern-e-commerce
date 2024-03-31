@@ -1,17 +1,30 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState, useEffect, useContext} from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
-import SellerNav from '../components/SellerNav'
+import {globalContext} from '../../Global_variable/context'
+import { useNavigate } from 'react-router-dom'
 
 
 const CreateProduct = () => {
     const params = useParams()
-    const sellerId = "65e0d50e460a53c15595febb"
+    
     const [name,setName] = useState("")
     const [desc,setDesc] = useState("")
     const [category,setCategory] = useState("")
     const [price,setPrice] = useState("")
     const [image, setImage] = useState(null);
+
+  
+    const navigate = useNavigate()
+    const [cartData, setCartData] = useState([])
+    const {state} = useContext(globalContext)
+    const [sellerId, setSellerId] = useState()
+
+    useEffect(()=> {
+      setSellerId(state.sellerId)
+    }, [state.sellerId])
+
+    console.log(sellerId)
 
     const formHandler= async(e) =>{
       e.preventDefault()
@@ -23,7 +36,7 @@ const CreateProduct = () => {
       formData.append('price', price);
 
       try {
-        const response =await axios.post(`http://localhost:4000/product/create/${sellerId}`, formData, {
+        const response =await axios.post(`${import.meta.env.VITE_API_URL}/product/create/${sellerId}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

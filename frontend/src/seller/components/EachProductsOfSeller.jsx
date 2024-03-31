@@ -14,7 +14,7 @@ const EachProductsOfSeller = ({product}) => {
   }
   function callApiForUpdate(){
     console.log(updatedPrice)
-    axios.put(`http://localhost:4000/product/update/${product._id}`, {price:updatedPrice})
+    axios.put(`${import.meta.env.VITE_API_URL}/product/update/${product._id}`, {price:updatedPrice})
     .then(res=>setUpdatedProduct(res.data))
     .catch(error=>console.log(error))
 
@@ -23,7 +23,7 @@ const EachProductsOfSeller = ({product}) => {
   console.log(updatedProduct)
 
   function callApiForDelete(){
-    axios.delete(`http://localhost:4000/product/delete/${product._id}`)
+    axios.delete(`${import.meta.env.VITE_API_URL}/product/delete/${product._id}`)
     .then(res=>console.log(res.data))
     .catch(error=>console.log(error))
 
@@ -65,8 +65,9 @@ const EachProductsOfSeller = ({product}) => {
                   </p>
                 }      
 
-                <button onClick={editHandler}>
+                <button onClick={editHandler} className=''>
                   <AiFillEdit size={30} color='green'/>
+                  <span>edit price</span>
                 </button>
               </div> 
                 

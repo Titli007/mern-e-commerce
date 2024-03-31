@@ -9,18 +9,17 @@ const HomeSection3 = () => {
   const navigate = useNavigate()
 
   useEffect(()=>{
-    const id = '65d366a5663b0f345086c712'
-    const getProductUrl = `http://localhost:4000/product/get`
+    const getProductUrl = `${import.meta.env.VITE_API_URL}/product/get`
     axios.get(getProductUrl)
     .then(res=>setAllProducts(res.data.products))
     .catch(error=>console.log(error))
   },[])
-  // 6287978317
+  
   return (
     <>
-    <p className='text-center font-bold text-4xl m-10'>Our Products</p>
+    <p className='text-center font-bold text-4xl my-10'>Our Products</p>
       {allProducts&&
-      <div className='grid grid-cols-4 gap-16 m-4'>
+      <div className='grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4 md:gap-16'>
         {allProducts.slice(0, 8).map((product,index)=>{
           return(
             <EachProduct key={index} product={product}/>

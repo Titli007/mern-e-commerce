@@ -1,24 +1,34 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import EachWishlist from '../components/user/EachWishlist'
 import { Toaster } from 'react-hot-toast'
+import { globalContext } from '../Global_variable/context';
+
 
 const wishlist = () => {
   const [allWishlistdata, setAllWishlistdata] = useState([])
 
-  const userId= '65d366a5663b0f345086c712'
+  const {state} = useContext(globalContext)
+  const [userId, setUserId] = useState()
+
+  useEffect(()=> {
+    setUserId(state.userId)
+  }, [state.userId])
+
 
   useEffect(()=>{
-    axios.get(`http://localhost:4000/wishlist/get/${userId}`)
+    if(userId){
+    axios.get(`${import.meta.env.VITE_API_URL}/wishlist/get/${userId}`)
     .then (res=>setAllWishlistdata(res.data.existingWishlist.products))
     .catch(error=>console.log(error))
-  },[])
+    }
+  },[userId])
 
   
 
   const deleteWishlist = async (productId) => {
     try {
-        const res = await axios.put(`http://localhost:4000/wishlist/delete/${userId}`, {
+        const res = await axios.put(`${import.meta.env.VITE_API_URL}/wishlist/delete/${userId}`, {
             product_id: productId
         });
         setAllWishlistdata(res.data.populatedWishlist.products)
@@ -36,7 +46,7 @@ const wishlist = () => {
       <div className='max-w-[1400px] w-full'>
         {
           allWishlistdata.length>0 ?(
-          <div className='grid grid-cols-3 m-10'>
+          <div className='grid grid-cols-2 lg:grid-cols-3 m-2 lg:m-10'>
             {
               allWishlistdata.map((data,index)=>{
                 return(

@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom';
 import { FaRegHeart } from "react-icons/fa";
@@ -7,9 +7,9 @@ import '../index.css'
 import { FaLink } from "react-icons/fa";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { GiReturnArrow } from "react-icons/gi";
-import {useNavigate} from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import { notify } from '../components/Toast';
+import {globalContext} from '../Global_variable/context'
 
 const ProductCard = () => {
 
@@ -19,52 +19,65 @@ const ProductCard = () => {
     const [dynamicCart, setDynamicCart] = useState(false)
     const [staticWishlist, setStaticWishList] = useState(false)
     const [dynamicWishlist, setDynamicWishlist] = useState(false)
+    const {state} = useContext(globalContext)
+    const [userId, setUserId] = useState()
+    const [product_id, setProduct_id] = useState("")
+
+    useEffect(()=> {
+      setUserId(state.userId)
+    }, [state.userId])
+
+    
 
     useEffect(()=>{
-        axios.get(`http://localhost:4000/singleproduct/get/${params.id}`)
-        .then(res=>{setProduct(res.data.existingProduct)})
+        axios.get(`${import.meta.env.VITE_API_URL}/singleproduct/get/${params.id}`)
+        .then(res=>{setProduct(res.data.existingProduct);console.log("res.data is =====",res.data)})
         .catch(error=>console.log(error))
     },[])
 
-    // let product_id = ""
-    // useEffect(()=>{
-    //   let product_id = product._id
-    // },[product])
+    useEffect(()=>{
+      if(product){
+        setProduct_id(product._id)
+      }
+    },[product])
 
-    
-    // for cart
 
     async function handleCart(){
-      notify("Product Added To The Cart" , 'success')
-      const userId = '65d366a5663b0f345086c712'
       try {
-        const res = await axios.put(`http://localhost:4000/cart/put/${userId}`, { product_id: product._id });
+        console.log("sdff")
+
+        if(userId){
+          console.log("userid", userId, "productid" , product_id)
+        const res = await axios.put(`${import.meta.env.VITE_API_URL}/cart/put/${userId}`, { product_id: product_id });
         setCartInfo(res.status);
+        notify("Product Added To The Cart" , 'success')
+        }
       } catch (error) {
         console.error('Error adding to cart:', error);
       }
     }
   
-    console.log("cartinfo", cartInfo)
   
   
     
     useEffect(() => {
       const fetchCartData = async () => {
-          const userId = '65d366a5663b0f345086c712';
+        if(userId){
           try {
-              const res = await axios.get(`http://localhost:4000/cart/get/${userId}`);
+              const res = await axios.get(`${import.meta.env.VITE_API_URL}/cart/get/${userId}`);
               const productIds = res.data.existingCart.products.map(data => data.product_id._id);
-              setDynamicCart(productIds.includes(product._id)); // Update dynamicCart with the fetched data
-          } catch (error) {
+              setDynamicCart(productIds.includes(product_id)); // Update dynamicCart with the fetched data
+            
+            } catch (error) {
               console.error('Error fetching cart data:', error);
           }
+        }
       };
 
       fetchCartData(); // Call the async function
-  }, [product]);
+  }, [product, userId]);
 
-console.log("dsfsdf",dynamicCart)
+
 
     
 
@@ -76,14 +89,16 @@ console.log("dsfsdf",dynamicCart)
 
 
     useEffect(()=>{
-      const userId= '65d366a5663b0f345086c712'
-      axios.get(`http://localhost:4000/wishlist/get/${userId}`)
-      .then(res=>
-        {const productIds = res.data.existingWishlist.products.map(data => data.product_id._id);
-        setDynamicWishlist(productIds.includes(product._id))}
-        )
-      .catch(error=>console.log(error))
-    },[product])
+      if(userId){
+        console.log("1", userId)
+        axios.get(`${import.meta.env.VITE_API_URL}/wishlist/get/${userId}`)
+        .then(res=>
+          {const productIds = res.data.existingWishlist.products.map(data => data.product_id._id);
+          setDynamicWishlist(productIds.includes(product_id))}
+          )
+        .catch(error=>console.log(error))
+      }
+    },[product, userId])
 
 
     useEffect(()=> {
@@ -97,10 +112,10 @@ console.log("dsfsdf",dynamicCart)
   
   
   async function postWishlistClick(e){
+    console.log("2", userId)
     notify("Product Added To The Wishlist", 'success')
-    const userId= '65d366a5663b0f345086c712'
     e.stopPropagation()
-    const res = await axios.post(`http://localhost:4000/wishlist/post/${userId}`, { product_id: product._id });
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/wishlist/post/${userId}`, { product_id: product_id });
     console.log(res.data)
     if(res.status===200) {
       setStaticWishList(true); //static
@@ -109,9 +124,8 @@ console.log("dsfsdf",dynamicCart)
   
   async function removeWishlistClick(e){
     notify("Product Removed From Wishlist", 'error')
-    const userId= '65d366a5663b0f345086c712'
     e.stopPropagation()
-    const res = await axios.put(`http://localhost:4000/wishlist/delete/${userId}`, { product_id: product._id });
+    const res = await axios.put(`${import.meta.env.VITE_API_URL}/wishlist/delete/${userId}`, { product_id: product_id });
     console.log(res.data)
     if(res.status===200) {
       setStaticWishList(false); //static
@@ -142,7 +156,7 @@ console.log("dsfsdf",dynamicCart)
     <div className='w-full flex flex-col items-center justify-center'>
       <div className='max-w-[1400px] w-full flex flex-col items-center'>
         <div className='flex p-5 text-lg w-full px-10 bg-bg'>
-          <div style={{borderRight: '2px solid gray'}} className=' px-5 w-1/4 flex justify-around'>
+          <div className='space-x-2 pr-6 md:px-5 md:w-1/4 flex justify-around border-r-2 border-gray-700'>
             <span>Home</span>
             <span>{'>'}</span>
             <span>Shop</span>
@@ -159,18 +173,20 @@ console.log("dsfsdf",dynamicCart)
         <div className='mt-10'>
           {
             product&&
-            <div className='flex justify-evenly mb-20 w-full'>
-              <div className='w-2/4 mr-20'>
+            <div className='md:flex space-y-10 md:flex-row justify-evenly mb-20 w-full'>
+              <div className='md:w-2/4 md:mr-20 m-8 md: m-2'>
                 <img src={product.imageUrl} alt='product image'/>
               </div>
-              <div className='space-y-9 w-96'>
+              <div className='space-y-9 md:w-96 text-center md:text-start m-10  md:mr-10'>
                 <p className='text-5xl  font-semibold tracking-wider'>{product.name}</p>
                 <p className='text-4xl text-gray-500'>₹{product.price}</p>
                 <p className='tracking-wide text-lg'>{product.desc}</p>
-                <p className='tracking-wide text-right text-2xl'>~ By {product.shop_name}</p>
-                <div className='flex justify-between pt-4'>
+                <p className='tracking-wide text-right text-2xl m-10 lg:m-0'>~ By {product.shop_name}</p>
+
+                <div className='flex justify-center md:justify-between pt-4'>
                   
-                <div className='p-5 border-2' onClick={handleWishlistClick}>
+                 
+                <div className='mx-4 md:mx-0 p-5 border-2' onClick={handleWishlistClick}>
                   {
                     staticWishlist ?(
                     <button onClick={removeWishlistClick}><FaHeart size={25} color="red"/></button>
@@ -180,7 +196,7 @@ console.log("dsfsdf",dynamicCart)
                   }
                 </div>
                   
-                <button className='p-5 border-2' onClick={copyUrlToClipboard}><FaLink/></button>
+                <button className='ml-4 mr-8 md:ml-0 md:mr-0 p-5 border-2' onClick={copyUrlToClipboard}><FaLink/></button>
 
 
                 {
@@ -193,11 +209,11 @@ console.log("dsfsdf",dynamicCart)
 
 
                 </div>
-                <div className='border-2 px-4 flex justify-between'>
+                <div className='border-2 px-4 flex justify-between m-12 md:m-0'>
                   <input placeholder='Enter Pincode' className='p-5 outline-none'/>
                   <button>CHECK</button>
                 </div>
-                <div className='flex justify-between pb-10'>
+                <div className='flex justify-between pb-10 m-10 md:m-0'>
                   <div className='flex '>
                     <div className='bg-orange-100  p-3 rounded-full mr-2'>
                       <CiDeliveryTruck size={35}/>

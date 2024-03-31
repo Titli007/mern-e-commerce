@@ -1,18 +1,26 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import axios from 'axios'
 import EachProduct from '../components/EachProduct'
 import ShopMaster from '../components/ShopMaster'
-import Nav from '../components/Nav'
 import Footer from '../components/Footer'
-import { FaRegHeart } from "react-icons/fa";
 import { useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast'
+import {globalContext} from '../Global_variable/context'
 
 
 const Shop = () => {
 
     const [allProducts, setAllProducts] = useState([])
     const [allWishlist, setAllWishlist] = useState([])
+    const {state} = useContext(globalContext)
+    const [userId, setUserId] = useState()
+
+
+    useEffect(()=> {
+        setUserId(state.userId)
+    }, [state.userId])
+
+    
 
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -21,7 +29,7 @@ const Shop = () => {
     console.log(category)
 
     useEffect(()=>{
-        const getProductUrl = category? `http://localhost:4000/product/get?category=${category}`  :`http://localhost:4000/product/get`
+        const getProductUrl = category? `${import.meta.env.VITE_API_URL}/product/get?category=${category}`  :`${import.meta.env.VITE_API_URL}/product/get`
         axios.get(getProductUrl)
         .then(res=>{setAllProducts(res.data.products)})
         .catch(error=>console.log(error))
@@ -30,14 +38,15 @@ const Shop = () => {
     // console.log(allProducts)
 
     useEffect(()=>{
-        const userId= '65d366a5663b0f345086c712'
-        axios.get(`http://localhost:4000/wishlist/get/${userId}`)
-        .then(res=>
-            {const productIds = res.data.existingWishlist.products.map(data => data.product_id._id);
-            setAllWishlist(productIds);}
-            )
-        .catch(error=>console.log(error))
-    },[])
+        if(userId){
+            axios.get(`${import.meta.env.VITE_API_URL}/wishlist/get/${userId}`)
+            .then(res=>
+                {const productIds = res.data.existingWishlist.products.map(data => data.product_id._id);
+                setAllWishlist(productIds);}
+                )
+            .catch(error=>console.log(error))
+        }
+    },[userId])
 
     // console.log("allwishlist",allWishlist)
 
@@ -49,7 +58,7 @@ const Shop = () => {
         <div><ShopMaster/></div>
             <div>
                 {allProducts.length>0&&
-                <div className='grid grid-cols-4 gap-16 m-4'>
+                <div className='grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4 md:gap-8 my-10 mx-3'>
                     {allProducts.map((product,index)=>{
                     return(
                         <EachProduct key={index} product={product} button="Add To Cart" isWishListed={allWishlist.includes(product._id)}/>
