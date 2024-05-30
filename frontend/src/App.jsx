@@ -24,7 +24,7 @@ function App() {
   return (
     <globalContext.Provider value={{state:state , dispatch: dispatch}}>
       <BrowserRouter>
-        <div className="w-full h-full">
+        <div className="w-full h-full" style={{ fontFamily: 'Inter, sans-serif' }}>
           <NavComponent/>
           <Routes>
             <Route path="/auth/signup" element={<SignUp />} />

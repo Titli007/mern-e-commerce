@@ -14,9 +14,12 @@ const SignUp = () => {
   const navigate = useNavigate()
 
   const formHandler = async(e) => {
+    
     e.preventDefault()
-    if(name.current.value !=="" && email.current.value && password.current.value.length >4) {
+    if(name.current.value !=="" && email.current.value !=="" && password.current.value.length >3) {
+      console.log(name.current.value, email.current.value, password.current.value)
       await axios.post(`${import.meta.env.VITE_API_URL}/user/signup`, {
+        
         name: name.current.value,
         email: email.current.value,
         pass: password.current.value

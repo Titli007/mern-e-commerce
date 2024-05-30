@@ -31,6 +31,7 @@ const wishlist = () => {
         const res = await axios.put(`${import.meta.env.VITE_API_URL}/wishlist/delete/${userId}`, {
             product_id: productId
         });
+        console.log(res.data)
         setAllWishlistdata(res.data.populatedWishlist.products)
         console.log("enter")
     } catch (error) {

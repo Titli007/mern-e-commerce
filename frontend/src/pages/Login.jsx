@@ -16,7 +16,7 @@ const Login = () => {
         e.preventDefault()
         // console.log(email.current.value, pass.current.value)
          
-        if(email.current.value !== "" &&  pass.current.value.length > 4){
+        if(email.current.value !== "" &&  pass.current.value.length > 3){
             await axios.post(`${import.meta.env.VITE_API_URL}/user/login`, {
                 email: email.current.value,
                 pass: pass.current.value

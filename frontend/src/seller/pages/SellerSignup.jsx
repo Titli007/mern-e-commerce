@@ -16,9 +16,10 @@ const SellerSignup = () => {
 
   const formHandler = async (e) => {
     e.preventDefault();
-    if (name.current.value !== "" && email.current.value && password.current.value.length > 4) {
+    if (name.current.value !== "" && email.current.value !== "") {
+      console.log(name.current.value, email.current.value, password.current.value)
       try {
-        const res1 = await axios.post("${import.meta.env.VITE_API_URL}/user/signup", {
+        const res1 = await axios.post(`${import.meta.env.VITE_API_URL}/user/signup`, {
           name: name.current.value,
           email: email.current.value,
           pass: password.current.value

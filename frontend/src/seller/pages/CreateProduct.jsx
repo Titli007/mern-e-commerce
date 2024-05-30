@@ -48,6 +48,7 @@ const CreateProduct = () => {
         setCategory('');
         setPrice('');
         setImage(null);
+        navigate('/seller')
       } catch (error) {
           console.error('Error while creating product:', error);
       }

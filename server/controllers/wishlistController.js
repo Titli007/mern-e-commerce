@@ -84,30 +84,55 @@ const getWishlist = async(req,res) =>{
 
 const deleteWishlist = async(req,res) => {
     try{
-        console.log("api call")
+        console.log("api call1")
         const userId = req.params.userId
         const product_id = req.body.product_id
 
         const existingWishlist = await Wishlist.findOne({userId : userId}).populate("products.product_id")
         console.log("exitisting wishlist", existingWishlist)
         if(!existingWishlist){
+            console.log("api call2")
             res.status(404).json({ error: 'product not found' })
         }
 
         existingWishlist.products.pull({ product_id });
-        await existingWishlist.save();
+        console.log("api call3")
+        // await existingWishlist.save();
+        
+        
 
         
 
-        const populatedWishlist =  await Wishlist.findById(existingWishlist._id).populate("products.product_id");
+        if(existingWishlist.products.length===1){
+            console.log("api call4")
+            const populatedWishlist = {
+                products: [],
+                userId: "",
+                __v: 0,
+                _id: ""
+            };
+            await Wishlist.deleteOne({ _id: existingWishlist._id });
+            return res.status(200).json({ message: "Product successfully deleted from the existing wishlist", populatedWishlist });
+        }
+        else{
+            console.log("existingWishlist" , existingWishlist)
+            console.log("existingWishlist.products.length", existingWishlist.products.length)
+            await existingWishlist.save();
+            const populatedWishlist =  await Wishlist.findById(existingWishlist._id).populate("products.product_id");
+            console.log("populated", populatedWishlist)
+            console.log("api call5")
+            return res.status(200).json({ message: "Product successfully deleted from the existing wishlist", populatedWishlist });
+        }
+        
+        // console.log("populated", populatedWishlist)
+        // console.log("api call5")
+        // console.log("exitisting wishlist", populatedWishlist)
 
-        console.log("exitisting wishlist", populatedWishlist)
 
-
-        return res.status(200).json({ message: "Product successfully deleted from the existing wishlist", populatedWishlist });
+        // return res.status(200).json({ message: "Product successfully deleted from the existing wishlist", populatedWishlist });
     } catch (error) {
         console.error('Error adding product to wishlist:', error);
-        return res.status(500).json({ message: "Some error occurred while adding product to wishlist" });
+        return res.status(500).json({ message: "Some error occurred while delete product from wishlist" });
     }
 }
 

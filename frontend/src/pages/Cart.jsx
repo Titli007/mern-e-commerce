@@ -99,6 +99,8 @@ const Cart = () => {
                   })
                 }
               </div>
+              
+              <div>
 
               <div className='flex flex-col text-3xl tracking-wide lg:w-1/3 h-min space-y-6 bg-secondary p-10 sticky top-10 m-10 lg:m-0'>
 
@@ -118,7 +120,8 @@ const Cart = () => {
                 </div>
               
               </div>
-
+              <p>Place Order</p>
+              </div>
 
             </div>
             ):(
